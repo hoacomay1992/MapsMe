@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Maps Me</string>
+    <string name="title_activity_maps">Maps Me</string>
+
+    <!--string activity_permision.xml-->
+    <string name="permission_request">Yêu cầu Quền truy cập</string>
+    <string name="provided_permission">Maps Me cần sự cho phép để truy cập vị trí thiết bị để cung cấp dịch vụ. làm ơn hãy cho phép việc truy cập vị trí</string>
+    <string name="grant_permission">Cho phép quền truy cập</string>
+    <string name="todo">Hình đại diện</string>
+
+    <!--string PermissionActivity.class-->
+    <string name="dialog_title">Quyền bị từ chối</string>
+    <string name="dialog_message">Quyền truy cập vị trí bị từ chối bị từ chối vĩnh viễn. bạn cần phải đi đến cài đặt để cho phép.</string>
+    <string name="dialog_negativeButton">Cancel</string>
+    <string name="dialog_positiveButton">OK</string>
+
+    <!--string MapsActivity.xml-->
+    <string name="button_find_location">Tìm địa điểm</string>
+</resources>
