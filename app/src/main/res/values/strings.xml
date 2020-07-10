@@ -16,4 +16,14 @@
 
     <!--string MapsActivity.xml-->
     <string name="button_find_location">Find Locations</string>
+    <string name="navigation_open">open</string>
+    <string name="navigation_close">close</string>
+
+    <!--string Maps_type.xml-->
+    <string name="map_type">Map type</string>
+    <string name="map_normal">Normal</string>
+    <string name="map_satellite">Satellite</string>
+    <string name="map_hybrid">Hybrid</string>
+    <string name="todo1">TODO</string>
+    <string name="todo2">TODO</string>
 </resources>

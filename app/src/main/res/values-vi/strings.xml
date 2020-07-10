@@ -16,4 +16,16 @@
 
     <!--string MapsActivity.xml-->
     <string name="button_find_location">Tìm địa điểm</string>
+
+    <!--Custom Navigation Drawer-->
+    <string name="navigation_open">open</string>
+    <string name="navigation_close">close</string>
+
+    <!--string Maps_type.xml-->
+    <string name="map_type">Loại bản đồ</string>
+    <string name="map_normal">Mặc định</string>
+    <string name="map_satellite">Vệ tinh</string>
+    <string name="map_hybrid">Địa hình</string>
+    <string name="todo1">TODO</string>
+    <string name="todo2">TODO</string>
 </resources>

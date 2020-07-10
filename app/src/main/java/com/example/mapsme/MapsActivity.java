@@ -2,8 +2,11 @@ package com.example.mapsme;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
@@ -12,12 +15,15 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.mapsme.databinding.ActivityMapsBinding;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -68,18 +74,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MaterialSearchBar materialSearchBar;
     private View mapView;
     private Button btnFind;
+    private RelativeLayout btnSetMapTyple;
+    private LinearLayout btnMapTypeNormal;
+    private LinearLayout btnMapTypeSatellite;
+    private LinearLayout btnMapTypeHybrid;
     private RippleBackground rippleBg;
+    private LinearLayout btnMapType;
 
     private final float DEFAULT_ZOOM = 18;
 
+    private ActivityMapsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_maps);
         materialSearchBar = findViewById(R.id.searchBar);
         btnFind = findViewById(R.id.btn_find);
-        rippleBg = findViewById(R.id.ripple_bg);
+        //rippleBg = findViewById(R.id.ripple_bg);
+        btnSetMapTyple = findViewById(R.id.btnSetMapType);
+//        btnMapTypeNormal = findViewById(R.id.btn_map_type_normal);
+//        btnMapTypeSatellite = findViewById(R.id.btn_map_type_satellite);
+//        btnMapTypeHybrid = findViewById(R.id.btn_map_type_hybrid);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -110,6 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onButtonClicked(int buttonCode) {
                 if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
                     //opening or closing a navigation drawer
+
                 } else if (buttonCode == MaterialSearchBar.BUTTON_BACK) {
                     materialSearchBar.disableSearch();
                 }
@@ -217,92 +234,60 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-        btnFind.setOnClickListener(new View.OnClickListener() {
+//        btnFind.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LatLng currentMarkerLocation = mMap.getCameraPosition().target;
+//                rippleBg.startRippleAnimation();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        rippleBg.stopRippleAnimation();
+//                        //startActivities(new Intent(MapsActivity.this, MainActivity.class));
+//                        //finish();
+//                    }
+//                }, 2000);
+//            }
+//        });
+
+        btnMapType = findViewById(R.id.btnMapType);
+        btnSetMapTyple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng currentMarkerLocation = mMap.getCameraPosition().target;
-                rippleBg.startRippleAnimation();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        rippleBg.stopRippleAnimation();
-                        //startActivities(new Intent(MapsActivity.this, MainActivity.class));
-                        //finish();
-                    }
-                }, 2000);
+                if (isFinishing() == true) {
+                    btnMapType.setVisibility(View.GONE);
+                } else {
+                    btnMapType.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        btnMapTypeNormal = findViewById(R.id.btn_map_type_normal);
+        btnMapTypeNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                btnMapType.setVisibility(View.GONE);
+            }
+        });
+        btnMapTypeHybrid = findViewById(R.id.btn_map_type_hybrid);
+        btnMapTypeHybrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                btnMapType.setVisibility(View.GONE);
+            }
+        });
+        btnMapTypeSatellite = findViewById(R.id.btn_map_type_satellite);
+        btnMapTypeSatellite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                btnMapType.setVisibility(View.GONE);
             }
         });
 
-//        //khởi tạo fused location
-//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            //Khi được phép sẽ gọi phương thức
-//            getCurrenLocation();
-//        } else {
-//            //khi permission denied thì yêu cầu permistion
-//            ActivityCompat.requestPermissions(MapsActivity.this,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-//        }
-
     }
 
-//    private void getCurrenLocation() {
-//        //khởi tạo vị trí chỉ định (task location)
-//        Task<Location> task = mFusedLocationProviderClient.getLastLocation();
-//        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(final Location location) {
-//                //khi hoàn thành
-//                if (location != null) {
-//                    //tiến thành đồng bộ trên maps
-//                    mapFragment.getMapAsync(new OnMapReadyCallback() {
-//                        @Override
-//                        public void onMapReady(GoogleMap googleMap) {
-//                            //khởi tạo kinh độ vĩ độ (Lat Lng)
-//                            LatLng latLng = new LatLng(location.getLatitude(),
-//                                    location.getLongitude());
-//                            //tạo tùy chọn đánh dấu (marker option)
-//                            MarkerOptions options = new MarkerOptions().position(latLng)
-//                                    .title("I am there");
-//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-//                            //thêm marker trên map
-//                            googleMap.addMarker(options);
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//    }
-//
-//    //yêu cầu quên truy cập vị trí khi khởi chạy ứng dụng
-//    private void requestPermisstion() {
-//        Dexter.withContext(this)
-//                .withPermissions(Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION))
-//                .withListener(new MultiplePermissionsListener() {
-//                    @Override
-//                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-//                        Toast.makeText(MapsActivity.this, "You must enable this permission", Toast.LENGTH_SHORT).show();
-//                    }
-//                }).check();
-//    }
-//
-//    //khi chưa được cấp quyền(permission denied) tiến hành yêu cầu quyền
-//    //kết quả trả về sẽ được xử lý ở đây
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if (requestCode == 44) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                //khi được phép gọi phương thức
-//                getCurrenLocation();
-//            }
-//        }
-//    }
 
     /**
      * Manipulates the map once available.
@@ -318,7 +303,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         //lấy vị trí hiện tại của thiết bị, hiển thị button đến vị trí thiết bị
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
 
         //thao tác trên biến View mapView. thiết lập vị trí Button hiển thị vị trí của thiết bị
         if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {
@@ -420,4 +407,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
     }
+
 }
